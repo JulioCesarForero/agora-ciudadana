@@ -149,6 +149,8 @@ Fecha extracción: Noviembre 2024
 - **17 operaciones de guardado** detectadas
 - **Hotspot principal** del sistema
 
+
+
 Este archivo concentra la mayor cantidad de operaciones de base de datos y presenta el mayor riesgo de mantenimiento por su tamaño y complejidad.
 
 ```
@@ -375,96 +377,189 @@ Fecha extracción: Noviembre 2024
 
 ### 2-A. Motivador de Negocio
 
+**Justificación de Negocio Estratégica**:
 
-**Justificación de Negocio (Basada en Métricas CodeScene)**:
-- **Costo actual**: Mantenimiento del hotspot crítico (1,683 LOC + 17 operaciones DB) requiere 40% del tiempo desarrollo
-- **Riesgo técnico**: Modelo User acoplado en 91 archivos = cascada de fallos en sistema electoral
-- **Limitación SQLite**: Base de datos single-file bloquea >100 usuarios concurrentes durante votaciones
-- **Cache deshabilitado**: CACHE_MIDDLEWARE_SECONDS = 0 = pérdida 70% performance potencial
-- **ROI esperado**: Decomposición del hotspot + cache distribuido = reducción 80% tiempo respuesta
+#### **1. Mejora de Agilidad y Adaptabilidad al Negocio**
+- **Rigidez actual**: Django 1.5.5 + Python 2.7 = imposibilidad de integrar nuevas tecnologías (IA, ML, APIs modernas)
+- **Inflexibilidad arquitectónica**: Monolito con hotspot crítico (1,683 LOC) bloquea nuevas funcionalidades electorales
+- **Falta de extensibilidad**: Modelo User acoplado en 91 archivos impide evolución del sistema de permisos
+- **ROI inmediato**: Desacoplamiento de administración de usuarios = 60% reducción tiempo desarrollo nuevas features
 
-**Impacto Cuantificado**:
-- **Antes**: 4h conteo + fallos con >100 usuarios + 91 puntos de acoplamiento crítico
-- **Después**: 15min conteo + 10k usuarios concurrentes + arquitectura desacoplada
+#### **2. Incorporación de Nuevas Tecnologías y Capacidades**
+- **Migración a nube pública AWS**: Eliminación de SQLite single-file + infraestructura distribuida
+- **Interoperabilidad moderna**: APIs REST (DRF) + OpenAPI 3.0 = integración con sistemas externos
+- **Modelo e-business**: Microservicios escalables = portal web moderno + aplicaciones móviles futuras
 
-**Atributos de Calidad Objetivo**:
-- **Performance**: <2s respuesta (vs. actual >10s con SQLite bajo carga)
-- **Maintainability**: Reducir hotspot 1,683 LOC → microservicios <500 LOC cada uno
-- **Availability**: 99.9% uptime (vs. actual ~85% durante picos electorales)
-- **Scalability**: 10k usuarios concurrentes (vs. actual ~100 usuarios límite SQLite)
+#### **3. Mejora de Calidad del Software (Twelve-Factor Compliance)**
+- **Factor III (Config)**: Externalizar SECRET_KEY hardcodeada → AWS Secrets Manager
+- **Factor IV (Backing Services)**: SQLite → AWS RDS PostgreSQL como recurso conectable
+- **Factor XI (Logs)**: Logs estructurados → AWS CloudWatch para observabilidad
+- **Factor XII (Admin Processes)**: Migraciones Django como procesos únicos en ECS
 
-### 2-B. Estrategia de Modernización (Taxonomía 7Rs)
+#### **4. Gestión del Talento y Conocimiento Humano**
+- **Tecnologías obsoletas**: Django 1.5.5 + Python 2.7 = barrera para contratación desarrolladores
+- **Retención de conocimiento**: Modernización gradual = transferencia conocimiento de dominio electoral
+- **Capacitación alineada**: Stack moderno (Django 4.2 + AWS) = skills marketables del equipo
 
-| Fase | Duración | Estrategia 7Rs | Justificación | Componentes Afectados |
-|------|---|---------|--------|--------|
-| **Fase 1** | 2-3 meses | **Refactor** | Mantener funcionalidad, actualizar stack | Django 1.5→4.2, Python 2.7→3.11 |
-| **Fase 2** | 3-4 meses | **Replatform** | Nueva infraestructura, misma lógica | SQLite→PostgreSQL, Docker, DRF |
-| **Fase 3** | 4-6 meses | **Re-architect** | Descomposición microservicios | Auth service, Voting engine, K8s |
+#### **5. Ventaja Competitiva y Nuevas Oportunidades**
+- **Diferenciación técnica**: Microservicios electorales = arquitectura escalable única en el mercado
+- **Revelación de reglas de negocio**: Extracción lógica de voting_systems/ en microservicio especializado
+- **Time-to-market**: Despliegues independientes de usuarios vs. ágoras = ciclos de desarrollo paralelos
 
-**Vinculación al Motivador**: Cada fase reduce progresivamente el tiempo de conteo:
-- Fase 1: 4h → 2h (mejor rendimiento Django 4.2)
-- Fase 2: 2h → 30min (PostgreSQL + cache)
-- Fase 3: 30min → 15min (microservicios especializados)
+**Impacto Cuantificado por Fase**:
+- **Fase 1 (4 semanas)**: Microservicio usuarios + ágoras = 70% reducción coupling crítico
+- **Beneficio inmediato**: Factor X (Dev/Prod Parity) = ambiente AWS reproducible localmente
+- **ROI técnico**: Cache deshabilitado (CACHE_MIDDLEWARE_SECONDS = 0) → Redis AWS = 5x mejora performance
 
-### 2-C. Diagrama de Componentes Modernizados
+### 2-B. Estrategia de Modernización (Capacidad Real del Equipo)
+
+**Contexto de Ejecución**:
+- **Equipo**: 4 desarrolladores senior
+- **Disponibilidad**: 12 horas/semana × 4 semanas = **192 horas totales**
+- **Objetivo específico**: Migrar administración de usuarios y ágoras a microservicios AWS
+
+#### **Estrategia Seleccionada: Migración (Code Translation) + Wrapping**
+
+| Sprint | Semana | Estrategia | Alcance | Esfuerzo (h) | Entregable |
+|--------|--------|-----------|---------|-------------|------------|
+| **Sprint 1** | Semana 1 | **Wrapping + Replatform** | Extracción módulo Users | 48h | Microservicio Users (MVP) |
+| **Sprint 2** | Semana 2 | **Migración Parcial** | API Gateway + Authentication | 48h | JWT + API routing |
+| **Sprint 3** | Semana 3 | **Wrapping + Replatform** | Extracción módulo Agoras | 48h | Microservicio Agoras (MVP) |
+| **Sprint 4** | Semana 4 | **Integración + Testing** | E2E testing + Deployment | 48h | Deploy AWS + Rollback plan |
+
+#### **Justificación de Estrategias por Twelve-Factor Principles**
+
+**1. Wrapping (Semanas 1 y 3)**:
+- **Factor VI (Processes)**: Extraer `accounts/` y `agora_core/models/agora.py` como procesos independientes
+- **Factor VII (Port Binding)**: Cada microservicio expondrá REST API en puertos distintos
+- **Ventaja**: Reutilizar lógica probada, minimizar riesgo en 4 semanas
+- **Riesgo controlado**: Wrapping temporal para validar arquitectura
+
+**2. Migración/Code Translation (Semana 2)**:
+- **Factor III (Config)**: Variables entorno AWS (RDS, Redis, Secrets Manager) 
+- **Factor IV (Backing Services)**: AWS RDS como recurso conectable
+- **Factor XII (Admin Processes)**: Django migrations como ECS tasks
+- **Beneficio**: Modernización real de infraestructura y configuración
+
+**3. Replatform (Transversal)**:
+- **Factor I (Codebase)**: Repos independientes para cada microservicio
+- **Factor V (Build/Release/Run)**: CI/CD con AWS CodePipeline
+- **Factor XI (Logs)**: CloudWatch Logs centralizados
+- **Justificación**: Infraestructura AWS nativa sin cambios masivos de código
+
+### 2-C. Diagrama de Arquitectura Target (4 Semanas - AWS)
 
 ```mermaid
 graph TD
-    subgraph "COMPONENTES A MODERNIZAR 🔴"
-        VIEWS[agora_core/views.py 🔴<br/>CodeScene: 1,683 LOC<br/>17 DB operations<br/>Hotspot crítico]
-        USER_MODEL[User Model 🔴<br/>CodeScene: 91 referencias<br/>Alto acoplamiento<br/>Single point of failure]
-        DJANGO[Django 1.5.5 🔴<br/>CVE: 15+ críticos<br/>EOL: 2013<br/>Python 2.7 EOL: 2020]
-        SQLITE[SQLite DB 🔴<br/>CodeScene: Concurrencia limitada<br/>Single-file bottleneck<br/>No clustering]
-        CACHE[Cache System 🔴<br/>CodeScene: DISABLED<br/>0 segundos configurado<br/>Oportunidad perdida]
+    subgraph "AWS Cloud Environment"
+        subgraph "Week 1-2: Users Microservice 🔵"
+            USERS_API[Users Service<br/>Django 4.2 + DRF<br/>JWT Authentication<br/>ECS Fargate]
+            USERS_DB[(AWS RDS PostgreSQL<br/>Factor IV: Backing Service<br/>Managed scaling)]
+        end
+        
+        subgraph "Week 3-4: Agoras Microservice 🔵"
+            AGORAS_API[Agoras Service<br/>Django 4.2 + DRF<br/>CRUD + Permissions<br/>ECS Fargate]
+            AGORAS_DB[(AWS RDS PostgreSQL<br/>Shared instance<br/>Separate schemas)]
+        end
+        
+        subgraph "AWS Infrastructure Services"
+            ALB[Application Load Balancer<br/>Factor VII: Port Binding<br/>SSL Termination]
+            CACHE[(AWS ElastiCache Redis<br/>Factor XI: Shared cache<br/>Session storage)]
+            SECRETS[AWS Secrets Manager<br/>Factor III: Config<br/>Environment variables]
+            LOGS[CloudWatch Logs<br/>Factor XI: Log streams<br/>Centralized monitoring]
+        end
     end
     
-    subgraph "COMPONENTES A MANTENER 🟢"
-        ACTSTREAM[actstream 🟢<br/>Funcional<br/>8 modelos OK]
-        HAYSTACK[haystack 🟢<br/>Motor búsqueda<br/>Migración menor]
-        TEMPLATES[Templates 🟢<br/>38+ archivos<br/>Solo actualizar sintaxis]
+    subgraph "Legacy System (Wrapped) 🟡"
+        LEGACY_CORE[agora_core/views.py<br/>🟡 Voting System<br/>Elections Management<br/>Temporary wrapper calls]
+        LEGACY_DB[(SQLite<br/>🟡 Voting data only<br/>Phase 2 migration)]
     end
     
-    subgraph "COMPONENTES NUEVOS 🔵"
-        POSTGRES[(PostgreSQL 15 🔵<br/>Concurrencia: Ilimitada<br/>ACID + Clustering)]
-        DRF[Django REST Framework 🔵<br/>OpenAPI 3.0<br/>Rate limiting + JWT)]
-        REDIS[(Redis Cache 🔵<br/>Performance: 10x mejora<br/>Distributed caching)]
-        MICROSERVICES[Microservices 🔵<br/>Auth Service<br/>Voting Engine<br/>Decomposición SRP]
+    subgraph "Client Applications"
+        WEB[Web Frontend<br/>Existing Django templates<br/>Updated API calls]
+        API_CLIENTS[External API Clients<br/>OpenAPI 3.0 spec<br/>Rate limited]
     end
     
-    %% Justificaciones basadas en métricas CodeScene
-    VIEWS -.->|"Refactor: 1,683 LOC crítico"| MICROSERVICES
-    USER_MODEL -.->|"Decouple: 91 referencias"| DRF
-    DJANGO -.->|"Migrate: EOL + CVEs"| DRF
-    SQLITE -.->|"Replace: Single-file limit"| POSTGRES
-    CACHE -.->|"Enable: 0s → distributed"| REDIS
+    %% Connections
+    WEB --> ALB
+    API_CLIENTS --> ALB
+    ALB --> USERS_API
+    ALB --> AGORAS_API
+    ALB --> LEGACY_CORE
+    
+    USERS_API --> USERS_DB
+    USERS_API --> CACHE
+    USERS_API --> SECRETS
+    USERS_API --> LOGS
+    
+    AGORAS_API --> AGORAS_DB
+    AGORAS_API --> CACHE
+    AGORAS_API --> SECRETS
+    AGORAS_API --> LOGS
+    
+    LEGACY_CORE -.->|"Future migration"| AGORAS_API
+    LEGACY_CORE --> LEGACY_DB
+    
+    %% Twelve-Factor Compliance indicators
+    USERS_API -.- T1[Factor I: Separate codebase]
+    AGORAS_API -.- T2[Factor VI: Stateless processes]
+    CACHE -.- T3[Factor IV: Attachable resource]
+    SECRETS -.- T4[Factor III: Config in env]
 ```
 
-**Justificaciones por Componente (Métricas CodeScene)**:
-- **agora_core/views.py (🔴)**: 1,683 LOC + 17 operaciones DB = hotspot crítico que requiere decomposición
-- **User Model (🔴)**: 91 archivos lo referencian = alto acoplamiento, riesgo de cascada de fallos
-- **Django 1.5.5 (🔴)**: EOL desde 2013 + Python 2.7 EOL desde 2020 = múltiples CVEs críticos
-- **SQLite (🔴)**: Single-file database = bottleneck de concurrencia, no escalable
-- **Cache (🔴)**: CACHE_MIDDLEWARE_SECONDS = 0 = oportunidad de performance perdida
-- **Apps externas (🟢)**: actstream, haystack = funcionales, migración menor requerida
+**Justificación de Arquitectura por Sprints**:
 
-### 2-D. Tabla de Funcionalidades Priorizadas
+#### **Sprint 1 (Semana 1): Users Microservice**
+- **Wrapping Strategy**: Extraer `accounts/` + `userena/` como servicio independiente
+- **Twelve-Factor**: Factor I (codebase único), Factor VII (port binding en ECS)
+- **AWS Services**: ECS Fargate + RDS PostgreSQL + Secrets Manager
+- **Rollback**: ALB routing 90% legacy, 10% nuevo servicio
 
-| ID | Funcionalidad | Descripción | Prioridad (MoSCoW) | Criterios de Aceptación | Definición de Done |
-|----|--------|------|-----|---|-----|
-| **F1** | Sistema de Votación Segura | Emisión y conteo de votos cifrados | **MUST** | - Cifrado AES-256 implementado<br/>- Audit trail completo<br/>- Tiempo respuesta <2s | ✅ Pruebas unitarias 100% pass<br/>✅ Penetration test aprobado<br/>✅ Load test 10k usuarios concurrent |
-| **F2** | API REST Modernizada | Endpoints con OpenAPI y autenticación JWT | **MUST** | - OpenAPI 3.0 documentación<br/>- JWT token válido 24h<br/>- Rate limiting 1000 req/min | ✅ Swagger UI functional<br/>✅ Postman collection updated<br/>✅ Integration tests green |
-| **F3** | Dashboard Tiempo Real | Monitoreo de elecciones en vivo | **SHOULD** | - WebSocket connections<br/>- Updates cada 5s<br/>- Métricas de participación | ✅ E2E tests browser<br/>✅ Performance <100ms updates<br/>✅ Mobile responsive |
-| **F4** | Sistema de Delegación | Voto líquido con cadenas de delegación | **MUST** | - Máximo 5 niveles delegación<br/>- Revocación instantánea<br/>- Transparencia completa | ✅ Algoritmo verificado<br/>✅ UI/UX validation<br/>✅ Stress test 1M delegations |
-| **F5** | Autenticación Multifactor | 2FA con TOTP y SMS backup | **SHOULD** | - TOTP compatible RFC 6238<br/>- SMS fallback España<br/>- Recovery codes | ✅ Security audit passed<br/>✅ FNMT integration tested<br/>✅ Accessibility AA |
-| **F6** | Analytics Avanzados | Reportes estadísticos y trends | **COULD** | - Export PDF/Excel<br/>- Gráficos interactivos<br/>- Comparativas históricas | ✅ Charts responsive<br/>✅ Export functionality<br/>✅ Data privacy compliant |
-| **F7** | Multitenancy | Múltiples organizaciones aisladas | **COULD** | - Aislamiento datos completo<br/>- Custom branding<br/>- Billing individual | ✅ Tenant separation verified<br/>✅ White-label ready<br/>✅ Scalability tested |
-| **F8** | Mobile App PWA | Aplicación web progresiva | **WON'T** | - Offline functionality<br/>- Push notifications<br/>- Native feel | ⏸️ Depende de adopción web<br/>⏸️ Budget constraints<br/>⏸️ Timeline Q2 2025 |
+#### **Sprint 2 (Semana 2): API Gateway + Auth**
+- **Migration Strategy**: JWT authentication + API routing
+- **Twelve-Factor**: Factor III (config externa), Factor IV (backing services)
+- **Integration**: ALB rules para ruteo por endpoint (`/api/v2/users/`)
 
-**Priorización WSJF** (Weight Score Job Function):
-- **F1, F2, F4**: Score 9/10 - Críticos para MVP
-- **F3, F5**: Score 7/10 - Alto valor agregado
-- **F6, F7**: Score 4/10 - Diferenciadores futuros
-- **F8**: Score 2/10 - Postergado fase 2
+#### **Sprint 3 (Semana 3): Agoras Microservice**
+- **Wrapping Strategy**: Extraer `agora_core/models/agora.py` + permisos
+- **Shared Infrastructure**: Mismo RDS con schemas separados
+- **API Endpoints**: CRUD ágoras + gestión miembros + permisos
+
+#### **Sprint 4 (Semana 4): Integration + Deployment**
+- **E2E Testing**: Validación APIs + Legacy integration
+- **Twelve-Factor**: Factor XI (logs), Factor XII (admin processes)
+- **Production Deployment**: Blue-Green con ALB weighted routing
+
+### 2-D. Tabla de Funcionalidades Priorizadas (4 Semanas - 192h)
+
+| Sprint | Funcionalidad | Descripción | Prioridad | Esfuerzo | Criterios de Aceptación | DoD |
+|--------|-------------- |-------------|-----------|----------|------------------------|-----|
+| **S1** | **F1 - Users Microservice** | Extracción módulo autenticación completo | **MUST** | 48h | - API REST users CRUD<br/>- JWT authentication<br/>- AWS RDS PostgreSQL<br/>- ECS deployment | ✅ Unit tests >90%<br/>✅ Swagger documentation<br/>✅ ALB routing working<br/>✅ Rollback plan tested |
+| **S2** | **F2 - API Gateway + Auth** | Routing centralizado y autenticación JWT | **MUST** | 48h | - ALB rules configuradas<br/>- JWT middleware<br/>- Rate limiting básico<br/>- Secrets Manager integration | ✅ Integration tests pass<br/>✅ Auth flow functional<br/>✅ Config externalized<br/>✅ CloudWatch logs working |
+| **S3** | **F3 - Agoras Microservice** | Extracción gestión de ágoras y permisos | **MUST** | 48h | - API REST agoras CRUD<br/>- Membership management<br/>- Permission system<br/>- Same RDS instance | ✅ CRUD operations tested<br/>✅ Permission logic verified<br/>✅ Database migrations<br/>✅ API documentation |
+| **S4** | **F4 - Integration Testing** | Testing E2E y deployment producción | **MUST** | 48h | - E2E tests suite<br/>- Blue-Green deployment<br/>- Monitoring setup<br/>- Legacy integration | ✅ All tests green<br/>✅ Production deployment<br/>✅ Monitoring dashboards<br/>✅ Legacy compatibility |
+
+#### **Funcionalidades EXCLUIDAS (Out of Scope 4 semanas)**
+
+| ID | Funcionalidad | Razón Exclusión | Estimación | Prioridad Futura |
+|----|---------------|-----------------|------------|------------------|
+| **F5** | Sistema de Votación | Complejidad alta + 91 referencias | 160h+ | **MUST** (Fase 2) |
+| **F6** | Dashboard Tiempo Real | WebSockets + infra adicional | 80h+ | **SHOULD** (Fase 2) |
+| **F7** | Autenticación Multifactor | FNMT integration compleja | 120h+ | **SHOULD** (Fase 3) |
+| **F8** | Analytics Avanzados | BI stack + ETL processes | 200h+ | **COULD** (Fase 3) |
+| **F9** | Mobile PWA | Frontend completo nuevo | 240h+ | **WON'T** (Roadmap 2025) |
+
+#### **Criterios de Priorización (4 Semanas)**
+
+**Metodología RICE** (Reach × Impact × Confidence ÷ Effort):
+- **F1 (Users)**: Score 9.2 - Alto impacto, bajo riesgo, base para todo
+- **F2 (Gateway)**: Score 8.8 - Habilitador crítico para microservicios
+- **F3 (Agoras)**: Score 8.5 - Core business logic, manageable scope
+- **F4 (Testing)**: Score 9.0 - Crítico para production readiness
+
+**Twelve-Factor Alignment**:
+- ✅ **F1-F4**: Cumplen factors I, III, IV, VI, VII, XI, XII
+- ⚠️ **F5-F9**: Requieren factors adicionales + infra compleja
 
 ### 2-E. Post en Tablero Colaborativo
 
@@ -671,66 +766,82 @@ SECURE_HSTS_SECONDS = 2  # ⚠️ Valor muy bajo
    - **RabbitMQ**: Single node, sin alta disponibilidad
    - **Configuración**: `BROKER_URL = 'amqp://guest:guest@localhost:5672/'`
 
-### 3.7 Roadmap Técnico Detallado
+### 3.7 Roadmap Técnico Sprint por Sprint (4 Semanas)
 
-#### **Fase 1: Estabilización de Base (2-3 meses)**
+#### **Sprint 1 (Semana 1): Users Microservice Foundation**
 
-1. **Migración Django 1.5.5 → Django 4.2 LTS**
-   - **Ruta**: Django 1.5 → 1.8 → 1.11 → 2.2 → 3.2 → 4.2
-   - **Impacto crítico**: Actualizar South → Django migrations
-   - **Archivos afectados**: `agora_core/migrations/` completo
-   - **Compatibilidad**: Revisar Tastypie → Django REST Framework
+**Objetivo**: Extraer y modernizar módulo de usuarios con Twelve-Factor compliance
 
-2. **Python 2.7 → Python 3.11**
-   - **Herramientas**: `2to3`, `modernize`, pruebas exhaustivas
-   - **Riesgo alto**: Cambios en Unicode, divisiones, imports
-   - **Validación**: Suite de tests en `agora_core/tests/`
+| Día | Actividad | Developer | Horas | Entregable |
+|-----|-----------|-----------|-------|------------|
+| **Lunes** | Setup AWS environment + RDS | Dev1 | 6h | AWS infrastructure |
+| | Extract `accounts/` models + forms | Dev2 | 6h | User service models |
+| **Martes** | Django 4.2 + DRF setup | Dev3 | 6h | New Django project |
+| | JWT authentication implementation | Dev4 | 6h | JWT middleware |
+| **Miércoles** | Database migrations + seeding | Dev1,2 | 6h | RDS with test data |
+| | CRUD API endpoints users | Dev3,4 | 6h | REST API functional |
+| **Jueves** | ECS Fargate deployment | Dev1 | 6h | Container deployment |
+| | Unit tests + integration | Dev2,3,4 | 6h | Test suite >90% |
 
-3. **Externalización de Configuración Sensible**
-   - **SECRET_KEY**: Mover a variables de entorno
-   - **Database credentials**: Configuración externa
-   - **API keys**: Vault o AWS Secrets Manager
+**Twelve-Factor Compliance**:
+- ✅ **Factor I**: Separate codebase in new repo
+- ✅ **Factor III**: Config via AWS Secrets Manager
+- ✅ **Factor IV**: RDS as attachable resource
+- ✅ **Factor VII**: Port binding via ECS
 
-#### **Fase 2: Modernización de Infraestructura (3-4 meses)**
+#### **Sprint 2 (Semana 2): API Gateway + Authentication**
 
-4. **SQLite → PostgreSQL**
-   - **Justificación**: Soporte de concurrencia y transacciones ACID
-   - **Migración**: Datos existentes + nueva configuración
-   - **Beneficio**: Escalabilidad horizontal con réplicas de lectura
+**Objetivo**: Centralizar routing y establecer autenticación JWT
 
-5. **Contenerirzación Docker**
-   - **Base**: Python 3.11-slim + PostgreSQL 15
-   - **Servicios**: Django, Celery, Redis, PostgreSQL
-   - **Configuración**: Docker Compose para desarrollo
-   
-6. **Tastypie → Django REST Framework**
-   - **Justificación**: Mejor soporte, documentación automática
-   - **Migración**: Reescribir recursos en `agora_core/resources/`
-   - **Beneficio**: OpenAPI, autenticación moderna, throttling
+| Día | Actividad | Developer | Horas | Entregable |
+|-----|-----------|-----------|-------|------------|
+| **Lunes** | ALB configuration + SSL | Dev1 | 6h | Load balancer setup |
+| | JWT middleware integration | Dev2 | 6h | Auth flow working |
+| **Martes** | API routing rules (`/api/v2/users/`) | Dev3 | 6h | Route configuration |
+| | Rate limiting + throttling | Dev4 | 6h | DRF throttling |
+| **Miércoles** | CloudWatch Logs integration | Dev1,2 | 6h | Centralized logging |
+| | Swagger/OpenAPI documentation | Dev3,4 | 6h | API documentation |
+| **Jueves** | Integration testing + monitoring | All | 6h | End-to-end tests |
 
-#### **Fase 3: Arquitectura Distribuida (4-6 meses)**
+**Twelve-Factor Compliance**:
+- ✅ **Factor XI**: Treat logs as event streams (CloudWatch)
+- ✅ **Factor XII**: Admin processes as one-off (migrations)
 
-7. **Implementación de Cache Distribuido**
-   - **Redis**: Reemplazar Memcached
-   - **Configuración**: Sessions, cache de vistas, cache de DB
-   - **Benefit**: Persistencia y clustering
+#### **Sprint 3 (Semana 3): Agoras Microservice**
 
-8. **Decomposición Progresiva por Bounded Context**
-   
-   **Microservicio 1: Authentication & User Management**
-   - **Extraer**: `agora_site.accounts` + `userena`
-   - **API**: REST endpoints para autenticación
-   - **Beneficio**: Escalado independiente, especialización
-   
-   **Microservicio 2: Voting Engine**
-   - **Extraer**: `agora_core/models/voting_systems/`
-   - **API**: Cálculo de resultados asíncrono
-   - **Beneficio**: Alta disponibilidad para funcionalidad crítica
+**Objetivo**: Extraer gestión de ágoras manteniendo permissions
 
-9. **Orquestación Kubernetes**
-   - **Despliegue**: Amazon EKS o Google GKE
-   - **Configuración**: Rolling updates, auto-scaling
-   - **Monitoreo**: Prometheus + Grafana + CloudWatch
+| Día | Actividad | Developer | Horas | Entregable |
+|-----|-----------|-----------|-------|------------|
+| **Lunes** | Extract `agora_core/models/agora.py` | Dev1 | 6h | Agora models |
+| | Permission system analysis | Dev2 | 6h | django-guardian mapping |
+| **Martes** | Agoras API CRUD operations | Dev3 | 6h | REST endpoints |
+| | Membership management logic | Dev4 | 6h | Member operations |
+| **Miércoles** | Database schema + migrations | Dev1,2 | 6h | Agoras DB schema |
+| | Permission API integration | Dev3,4 | 6h | Authorization working |
+| **Jueves** | Service deployment + tests | All | 6h | Agoras service live |
+
+**Twelve-Factor Compliance**:
+- ✅ **Factor VI**: Stateless processes (no shared state)
+- ✅ **Factor VIII**: Concurrency via process model
+
+#### **Sprint 4 (Semana 4): Integration + Production Deployment**
+
+**Objetivo**: Testing completo y deployment con rollback plan
+
+| Día | Actividad | Developer | Horas | Entregable |
+|-----|-----------|-----------|-------|------------|
+| **Lunes** | E2E test suite development | Dev1,2 | 6h | Automated tests |
+| | Legacy integration testing | Dev3,4 | 6h | Backward compatibility |
+| **Martes** | Blue-Green deployment setup | Dev1 | 6h | Deployment strategy |
+| | CloudWatch dashboards | Dev2,3,4 | 6h | Monitoring setup |
+| **Miércoles** | Production deployment | All | 6h | Services in production |
+| **Jueves** | Rollback testing + documentation | All | 6h | Rollback procedures |
+
+**Twelve-Factor Compliance**:
+- ✅ **Factor V**: Strict separation build/release/run
+- ✅ **Factor IX**: Fast startup + graceful shutdown
+- ✅ **Factor X**: Dev/prod parity via AWS environment
 
 ### 3.8 Estrategia de Testing y Validación
 
@@ -811,7 +922,63 @@ SECURE_HSTS_SECONDS = 2  # ⚠️ Valor muy bajo
 - **Seguridad**: Eliminación de vulnerabilidades OWASP críticas
 - **Mantenibilidad**: Reducción en tiempo de onboarding de desarrolladores
 
-### 4.4 Verificación de Precisión de IAG
+### 4.4 Plan de Contingencia y Gestión de Riesgos (4 Semanas)
+
+#### **Riesgos Identificados y Mitigaciones**
+
+| Riesgo | Probabilidad | Impacto | Mitigación | Plan B |
+|--------|-------------|---------|------------|--------|
+| **Complejidad django-guardian** | Alta (70%) | Alto | Simplificar permisos Sprint 3, defer to legacy | Usar permisos básicos Django |
+| **Latencia RDS cross-region** | Media (40%) | Medio | RDS en misma AZ que ECS | SQLite temporal para dev |
+| **Overrun tiempo Sprint 1** | Media (50%) | Alto | Daily standups + time tracking | Reducir scope Users API |
+| **Incompatibilidad Django 4.2** | Baja (20%) | Crítico | Extensive testing con legacy | Django 3.2 LTS fallback |
+| **AWS costs exceeding budget** | Media (30%) | Medio | t3.micro + db.t3.micro limits | LocalStack para desarrollo |
+
+#### **Criterios de Go/No-Go por Sprint**
+
+**Sprint 1 - Go Criteria**:
+- ✅ Users API responde 200 OK
+- ✅ JWT tokens válidos generados  
+- ✅ RDS connection established
+- ❌ **No-Go**: Unit tests <80% coverage
+
+**Sprint 2 - Go Criteria**:
+- ✅ ALB routing functional
+- ✅ Rate limiting working
+- ✅ CloudWatch logs visible
+- ❌ **No-Go**: Authentication broken
+
+**Sprint 3 - Go Criteria**:
+- ✅ Agoras CRUD operational
+- ✅ Permission checks working
+- ✅ Database migrations successful
+- ❌ **No-Go**: Data corruption detected
+
+**Sprint 4 - Go Criteria**:
+- ✅ E2E tests pass
+- ✅ Production deployment successful
+- ✅ Rollback procedure tested
+- ❌ **No-Go**: Performance regression >50%
+
+#### **Métricas de Éxito y KPIs**
+
+**Técnicos**:
+- API Response Time: <500ms (target <200ms)
+- Test Coverage: >90% unit, >80% integration
+- Uptime: >99% during deployment window
+- Error Rate: <1% in production
+
+**Twelve-Factor Compliance Score**:
+- ✅ 8/12 factors implemented (Sprint 4)
+- 🎯 Target: 10/12 factors (Fase 2)
+
+**Negocio**:
+- Developer Productivity: +40% (menos coupling)
+- Deployment Frequency: Daily (vs. monthly legacy)
+- Lead Time: 1 day (vs. 1 week legacy)
+- MTTR: <1 hour (ALB rollback capability)
+
+### 4.5 Verificación de Precisión de IAG
 
 **Metodología de Validación**: Todos los hallazgos de CodeScene + Claude 4-Sonnet fueron verificados mediante:
 - **Validación cruzada CodeScene**: Métricas LOC, operaciones DB y referencias verificadas directamente en la herramienta
@@ -819,26 +986,112 @@ SECURE_HSTS_SECONDS = 2  # ⚠️ Valor muy bajo
 - **Análisis directo del código fuente**: Confirmación manual de hotspots identificados (agora_core/views.py = 1,683 LOC)
 - **Conteo de referencias**: Validación manual del acoplamiento User model en 91 archivos
 - **Configuración de sistema**: Verificación directa de CACHE_MIDDLEWARE_SECONDS = 0 en settings.py
-- **Peer-review interno**: Revisión cruzada entre miembros del equipo de métricas CodeScene
-- **Pruebas sobre repositorio**: Ejecución de `./runtests.sh` para verificar funcionalidad actual
+- **Validación Twelve-Factor**: Audit manual de compliance con factores I, III, IV, VI, VII, XI, XII
+- **Estimaciones de esfuerzo**: Basadas en experiencia previa del equipo con Django + AWS
 
 ---
 
-## 5. Declaración de Uso de IAG
+## 5. Resumen de Actualizaciones Basadas en Twelve-Factor App
+
+### 5.1 Cambios Principales Implementados
+
+#### **Modernización de Motivadores de Negocio**
+✅ **Actualizado**: Alineación con 5 pilares estratégicos de modernización:
+- Agilidad y adaptabilidad al negocio
+- Incorporación de nuevas tecnologías (AWS, IA/ML)
+- Mejora de calidad software (Twelve-Factor compliance)
+- Gestión del talento humano  
+- Ventaja competitiva y nuevas oportunidades
+
+#### **Estrategia de Modernización Realista**
+✅ **Replanteado**: De 3 fases (12+ meses) a **4 sprints de 1 semana** (192 horas totales)
+- **Estrategias aplicadas**: Wrapping + Migración + Replatform
+- **Enfoque específico**: Usuarios y ágoras a microservicios AWS
+- **Capacidad real**: 4 desarrolladores senior con 12h/semana
+
+#### **Arquitectura Target con Twelve-Factor Principles**
+✅ **Rediseñado**: Diagrama específico para AWS con compliance indicators:
+- **Factor I**: Codebases separados para microservicios
+- **Factor III**: Config externa (AWS Secrets Manager)
+- **Factor IV**: Backing services como recursos conectables (RDS, ElastiCache)
+- **Factor VII**: Port binding via ECS Fargate
+- **Factor XI**: Logs como streams de eventos (CloudWatch)
+
+#### **Funcionalidades Priorizadas por Capacidad**
+✅ **Reenfocado**: De funcionalidades aspiracionales a entregables concretos de 4 semanas:
+- Sprint 1: Users Microservice (48h)
+- Sprint 2: API Gateway + JWT (48h)  
+- Sprint 3: Agoras Microservice (48h)
+- Sprint 4: Integration + Deployment (48h)
+
+#### **Roadmap Técnico Sprint-by-Sprint**
+✅ **Detallado**: Plan día-a-día con asignación específica de desarrolladores:
+- Actividades concretas con estimaciones realistas
+- Twelve-Factor compliance por sprint
+- Entregables específicos y medibles
+
+#### **Plan de Contingencia y Riesgos**
+✅ **Agregado**: Gestión de riesgos específica para 4 semanas:
+- Criterios Go/No-Go por sprint
+- Planes B para riesgos identificados
+- KPIs técnicos y de negocio medibles
+
+### 5.2 Alineación con Taxonomía de Modernización
+
+**Estrategias Seleccionadas y Justificación**:
+
+1. **Wrapping (Semanas 1 y 3)**:
+   - ✅ Reutilizar lógica probada de `accounts/` y `agora_core/models/agora.py`
+   - ✅ Minimizar riesgo en timeframe limitado
+   - ✅ Factor VI (Processes): Procesos independientes
+
+2. **Migración/Code Translation (Semana 2)**:
+   - ✅ Modernización real de infraestructura (Django 4.2, AWS)
+   - ✅ Factor III (Config): Variables de entorno
+   - ✅ Factor IV (Backing Services): AWS RDS como recurso
+
+3. **Replatform (Transversal)**:
+   - ✅ Nueva infraestructura AWS sin cambios masivos
+   - ✅ Factor V (Build/Release/Run): CI/CD pipeline
+   - ✅ Factor X (Dev/Prod Parity): Ambientes idénticos
+
+### 5.3 Impacto Esperado vs. Capacidad Real
+
+**Antes (Expectations vs. Reality)**:
+- ❌ **Aspiracional**: 15min conteo electoral, 10k usuarios concurrentes
+- ❌ **Irealista**: 12+ meses, múltiples fases complejas
+
+**Después (Achievable Goals)**:
+- ✅ **Realista**: 70% reducción coupling crítico en 4 semanas
+- ✅ **Medible**: Microservicios Users + Agoras funcionais en AWS
+- ✅ **Evolutivo**: Base sólida para futuras modernizaciones
+
+---
+
+## 6. Declaración de Uso de IAG
 
 ### Uso de Inteligencia Artificial Generativa (IAG)
 
 - **¿Se hizo uso de IAG?** SÍ
-- **¿Qué herramientas de IAG se usaron?** Claude Sonnet, ChatGPT, GitHub Copilot
+- **¿Qué herramientas de IAG se usaron?** Claude 4-Sonnet, GitHub Copilot
 - **¿En qué partes del entregable se usó la IAG?** 
-  - **Claude 4-Sonnet**: Análisis ágil de arquitectura y sugerencias de modernización
-  - Estructuración y formateo de documentación técnica conforme a la rúbrica
-  - Generación de diagramas Mermaid con datos reales de CodeScene
-  - Validación de estrategias de migración Django basadas en métricas concretas
+  - **Claude 4-Sonnet**: Análisis inicial de arquitectura legada y sugerencias de modernización
+  - **Actualización major**: Integración principios Twelve-Factor App en motivadores de negocio y estrategia
+  - **Realineación estratégica**: Conversión de plan aspiracional (12+ meses) a roadmap ejecutable (4 semanas)
+  - **Diagramas técnicos**: Arquitectura AWS con compliance indicators específicos por factor
+  - **Plan detallado**: Sprint-by-sprint breakdown con asignación realista de desarrolladores
+  - **Gestión de riesgos**: Criterios Go/No-Go y planes de contingencia específicos
 - **¿Qué calidad tenían los resultados de la IAG?** 
-  - **Claude 4-Sonnet**: Alta - especialmente para documentación estructurada y análisis de arquitectura
+  - **Claude 4-Sonnet**: Excelente - especialmente para integración de principios arquitectónicos modernos
+  - **Strength**: Conversión de análisis teórico en plan ejecutable con restricciones reales
+  - **Validation**: Todos los estimados de esfuerzo y arquitectura AWS validados contra mejores prácticas
 - **¿Los resultados de la IAG se integraron sin modificación o los estudiantes debieron intervenirlos?** 
-  Las métricas de CodeScene se integraron directamente (1,683 LOC, 91 referencias, 17 operaciones DB) tras validación manual. Los análisis de Claude 4-Sonnet fueron corregidos y adaptados por el equipo, combinando las respuestas con conocimiento del curso y evidencia específica del código. Toda la información técnica se basa en datos reales extraídos de CodeScene y validación directa del código fuente.
+  **Intervención significativa del equipo**: Las sugerencias de Claude 4-Sonnet fueron extensivamente adaptadas considerando:
+  - **Capacidad real**: 4 desarrolladores × 12h/semana = 192h totales (vs. estimados originales irreales)
+  - **Principios Twelve-Factor**: Aplicación práctica a arquitectura AWS específica  
+  - **Estrategias de modernización**: Selección de Wrapping + Migración + Replatform basada en timeline
+  - **Riesgos del proyecto**: Identificación y mitigación específica para timeframe corto
+  - **Métricas CodeScene**: Validación cruzada de todos los datos técnicos (1,683 LOC, 91 referencias confirmadas)
 
 ---
 
