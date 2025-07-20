@@ -45,9 +45,9 @@
 **Estrategia Híbrida**: Combinación de **Replatforming** + **Refactoring**
 
 #### Fase 1: Replatforming (Base Tecnológica)
-- Migración Python 2.7 → Python 3.11+
-- Actualización Django 1.5.5 → Django 4.2 LTS
-- Contenedorización con Docker
+- Migración Python 2.7 → Python 3.11+ (deseable a futuro)
+- Actualización Django 1.5.5 → Django 4.2 LTS (deseable a futuro no aplica para el experimento)
+- Contenedorización con Docker 
 - Migración SQLite → PostgreSQL para todos los ambientes
 
 #### Fase 2: Refactoring (Separación de Responsabilidades)
@@ -63,7 +63,6 @@
 ```mermaid
 graph TB
     subgraph "Cliente"
-        WEB[Web Frontend - React/Vue]
         API_CLIENT[API Clients]
     end
 
