@@ -1,51 +1,63 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -eo pipefail        # aborta en errores, pero los controlamos puntualmente
 
-# Esperar a que la base de datos esté lista
-echo "Waiting for database..."
-while ! nc -z rabbitmq 5672; do
-  sleep 0.1
-done
-echo "Database is ready!"
+# ------------------- 1. Esperar a RabbitMQ -------------------
+echo "Waiting for RabbitMQ..."
+while ! nc -z rabbitmq 5672; do sleep 0.3; done
+echo "RabbitMQ is ready!"
 
-# Asegurar que los directorios necesarios existen
+# ------------------- 2. Directorios y permisos ----------------
 mkdir -p /app/agora_site/media/data
 mkdir -p /app/data
 
-# Asegurar que la base de datos SQLite existe y tiene los permisos correctos
 touch /app/data/db.sqlite
-chmod 777 /app/data/db.sqlite
+chmod 777 /app/data/db.sqlite    # SQLite sólo para desarrollo
 
-# Descargar la base de datos GeoIP si no existe
-if [ ! -f /app/agora_site/media/data/GeoLiteCity.dat ]; then
-    echo "Downloading GeoIP database..."
+# ------------------- 3. GeoIP (opcional) ----------------------
+GEOIP_FILE=/app/agora_site/media/data/GeoLiteCity.dat
+if [ ! -f "$GEOIP_FILE" ]; then
+  if [ -n "${MAXMIND_KEY:-}" ]; then
+    echo "Downloading GeoIP database from MaxMind..."
     cd /app/agora_site/media/data
-    wget -q "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=YOUR_LICENSE_KEY&suffix=tar.gz" -O GeoLite2-City.tar.gz || true
-    if [ -f GeoLite2-City.tar.gz ]; then
-        tar xzf GeoLite2-City.tar.gz
-        mv GeoLite2-City_*/GeoLite2-City.mmdb GeoLiteCity.dat
-        rm -rf GeoLite2-City_* GeoLite2-City.tar.gz
+
+    TMP_ARCHIVE=$(mktemp)
+    # Descarga — si falla, continuamos
+    if curl -fsSL \
+        "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=${MAXMIND_KEY}&suffix=tar.gz" \
+        -o "$TMP_ARCHIVE"; then
+
+      # Intenta extraer el .mmdb
+      if tar -xzf "$TMP_ARCHIVE" --wildcards --no-anchored '*.mmdb' --strip-components=1; then
+        mv *.mmdb "$GEOIP_FILE"
+        echo "GeoIP database ready."
+      else
+        echo "⚠️  El archivo descargado no se pudo descomprimir correctamente. Continuaré sin GeoIP."
+        touch "$GEOIP_FILE"
+      fi
     else
-        echo "Warning: Could not download GeoIP database. Geolocation features will be disabled."
-        touch /app/agora_site/media/data/GeoLiteCity.dat
+      echo "⚠️  Falló la descarga de GeoIP (¿clave incorrecta?). Continuaré sin GeoIP."
+      touch "$GEOIP_FILE"
     fi
+    rm -f "$TMP_ARCHIVE"
+  else
+    echo "MAXMIND_KEY no definido; se omite la descarga de GeoIP."
+    touch "$GEOIP_FILE"
+  fi
 fi
 
-# Asegurar que estamos en el directorio correcto
+# ------------------- 4. Migraciones iniciales -----------------
 cd /app
-
-# Inicializar la base de datos si es necesario
 if [ ! -s /app/data/db.sqlite ]; then
-    echo "Initializing database..."
-    python manage.py syncdb --all --noinput || true
-    python manage.py migrate --fake || true
-    python manage.py rebuild_index --noinput || true
-    python manage.py check_permissions || true
-    python manage.py compilemessages || true
+  echo "Initializing database..."
+  python manage.py syncdb --all --noinput || true
+  python manage.py migrate --fake || true
+  python manage.py rebuild_index --noinput || true
+  python manage.py check_permissions || true
+  python manage.py compilemessages || true
 fi
 
-# Iniciar Celery en segundo plano
+# ------------------- 5. Arrancar Celery -----------------------
 celery -A agora_site worker -l info -B -S djcelery.schedulers.DatabaseScheduler &
 
-# Ejecutar el comando principal
-exec "$@" 
+# ------------------- 6. Ejecutar comando principal ------------
+exec "$@"

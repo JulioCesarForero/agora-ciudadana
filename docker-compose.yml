@@ -11,6 +11,7 @@ services:
       - PYTHONUNBUFFERED=1
       - DJANGO_SETTINGS_MODULE=agora_site.settings
       - C_FORCE_ROOT=true
+      - MAXMIND_KEY=ABCD1234567890
     depends_on:
       - rabbitmq
     restart: unless-stopped
