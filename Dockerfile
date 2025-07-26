@@ -1,32 +1,42 @@
-FROM python:2.7-slim
+# ---- Imagen base (EOL) ----
+    FROM python:2.7-slim
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV DJANGO_SETTINGS_MODULE=agora_site.settings
-ENV PYTHONIOENCODING=utf-8
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
-
-# Instala solo lo necesario
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    gettext \
-    build-essential \
-    libxml2-dev \
-    libxslt1-dev \
-    libjpeg-dev \
-    zlib1g-dev \
-    libfreetype6-dev \
-    uuid-dev \
-    curl \
-    wget \
-    sqlite3 \
-    locales \
-    netcat-traditional \
-    && rm -rf /var/lib/apt/lists/* \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-
+    # ---- Configuración de entorno ----
+    ENV DEBIAN_FRONTEND=noninteractive \
+        PYTHONUNBUFFERED=1 \
+        PYTHONDONTWRITEBYTECODE=1 \
+        DJANGO_SETTINGS_MODULE=agora_site.settings \
+        PYTHONIOENCODING=utf-8 \
+        LANG=C.UTF-8 \
+        LC_ALL=C.UTF-8
+    
+    # ---- Repos históricos + firmas caducas ----
+    # 1. Cambia mirrors a archive.debian.org
+    # 2. Añade un archivo de configuración que desactive la verificación de vigencia
+    # 3. Usa la opción -o Acquire::Check-Valid-Until=false en apt-get
+    RUN set -eux; \
+        sed -i 's|deb.debian.org/debian|archive.debian.org/debian|g' /etc/apt/sources.list && \
+        sed -i 's|security.debian.org|archive.debian.org|g' /etc/apt/sources.list && \
+        echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99ignore-valid-until && \
+        apt-get -o Acquire::Check-Valid-Until=false update && \
+        apt-get -o Acquire::Check-Valid-Until=false install -y --no-install-recommends \
+            git \
+            gettext \
+            build-essential \
+            libxml2-dev \
+            libxslt1-dev \
+            libjpeg-dev \
+            zlib1g-dev \
+            libfreetype6-dev \
+            uuid-dev \
+            curl \
+            wget \
+            sqlite3 \
+            locales \
+            netcat-traditional && \
+        rm -rf /var/lib/apt/lists/* && \
+        localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+    
 # Crea directorio de trabajo
 WORKDIR /app
 
