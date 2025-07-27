@@ -44,33 +44,19 @@
 			"response": []
 		},
 		{
-			"name": "Listar ágoras",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "{{baseURL}}/api/v1/agora/",
-					"host": [
-						"{{baseURL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"agora",
-						""
-					]
-				},
-				"description": "Generated from cURL: curl -X GET http://localhost:8000/api/v1/agora/ \\\r\n  -H \"Accept: application/json\"\r\n"
-			},
-			"response": []
-		},
-		{
 			"name": "Registro Usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"user\", pm.response.json().username);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -81,7 +67,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"2donuevousuario\",\n    \"email\": \"2donuevo@ejemplo.com\",\n    \"password1\": \"password123\",\n    \"password2\": \"password123\",\n    \"first_name\": \"2doNombre\",\n    \"last_name\": \"2doApellido\"\n  }",
+					"raw": "{\n    \"username\": \"6tonuevousuario\",\n    \"email\": \"6tonuevo@ejemplo.com\",\n    \"password1\": \"password123\",\n    \"password2\": \"password123\",\n    \"first_name\": \"6toNombre\",\n    \"last_name\": \"6toApellido\"\n  }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -102,113 +88,6 @@
 					]
 				},
 				"description": "Generated from cURL: curl -X POST http://localhost:8000/api/v1/user/register/ \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"username\": \"nuevousuario\",\n    \"email\": \"nuevo@ejemplo.com\",\n    \"password1\": \"password123\",\n    \"password2\": \"password123\",\n    \"first_name\": \"Nombre\",\n    \"last_name\": \"Apellido\"\n  }'"
-			},
-			"response": []
-		},
-		{
-			"name": "Crear nueva ágora",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "ApiKey {{user}}:{{ApiKey}}"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"pretty_name\": \"Mi Nueva Ágora 2 Postman\",\n    \"short_description\": \"Descripción corta de la ágora 2 Postman\",\n    \"membership_policy\": \"ANYONE_CAN_JOIN\",\n    \"comments_policy\": \"ANYONE_CAN_COMMENT\"\n  }",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{baseURL}}/api/v1/agora/",
-					"host": [
-						"{{baseURL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"agora",
-						""
-					]
-				},
-				"description": "Generated from cURL: curl -X POST http://localhost:8000/api/v1/agora/ \\\n  -H \"Content-Type: application/json\" \\\n  -H \"Authorization: ApiKey usuario1:su_api_key_aqui\" \\\n  -d '{\n    \"pretty_name\": \"Mi Nueva Ágora\",\n    \"short_description\": \"Descripción corta de la ágora\",\n    \"membership_policy\": \"ANYONE_CAN_JOIN\",\n    \"comments_policy\": \"ANYONE_CAN_COMMENT\"\n  }'"
-			},
-			"response": []
-		},
-		{
-			"name": "Obtener ágora específica",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "{{baseURL}}/api/v1/agora/1/",
-					"host": [
-						"{{baseURL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"agora",
-						"1",
-						""
-					]
-				},
-				"description": "Generated from cURL: curl -X GET http://localhost:8000/api/v1/agora/1/ \\\r\n  -H \"Accept: application/json\""
-			},
-			"response": []
-		},
-		{
-			"name": "Unirse a ágora",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "ApiKey 2donuevousuario:8ea1bdfbc92d34df8f5319136056fa4f98a67bbe"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"action\": \"join\"}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{baseURL}}/api/v1/agora/3/action/",
-					"host": [
-						"{{baseURL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"agora",
-						"3",
-						"action",
-						""
-					]
-				},
-				"description": "Generated from cURL: curl -X POST http://localhost:8000/api/v1/agora/1/action/ \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -H \"Authorization: ApiKey usuario1:su_api_key_aqui\" \\\r\n  -d '{\"action\": \"join\"}'"
 			},
 			"response": []
 		},
@@ -277,6 +156,258 @@
 				"description": "Generated from cURL: curl -X POST http://localhost:8000/api/v1/agora/ \\\n  -H \"Content-Type: application/json\" \\\n  -H \"X-CSRFToken: $CSRF_TOKEN\" \\\n  -b cookies.txt \\\n  -d '{\n    \"pretty_name\": \"Mi Nueva Ágora\",\n    \"short_description\": \"Descripción corta de la ágora\",\n    \"membership_policy\": \"ANYONE_CAN_JOIN\",\n    \"comments_policy\": \"ANYONE_CAN_COMMENT\"\n  }'"
 			},
 			"response": []
+		},
+		{
+			"name": "http://localhost:8000/api/v1/election/?agora=1",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/election/?agora=1",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"election",
+						""
+					],
+					"query": [
+						{
+							"key": "agora",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl -X GET http://localhost:8000/api/v1/election/?agora=1 \\\r\n  -H \"Accept: application/json\""
+			},
+			"response": []
+		},
+		{
+			"name": "Listar ágoras",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/agora/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"agora",
+						""
+					]
+				},
+				"description": "Generated from cURL: curl -X GET http://localhost:8000/api/v1/agora/ \\\r\n  -H \"Accept: application/json\"\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Crear nueva ágora",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"AgoraId\", pm.response.json().id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "ApiKey {{user}}:{{ApiKey}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pretty_name\": \"Mi Ágora 2 Usuario 4 Postman\",\n    \"short_description\": \"Descripción corta de la ágora 2 en Postman\",\n    \"membership_policy\": \"ANYONE_CAN_JOIN\",\n    \"comments_policy\": \"ANYONE_CAN_COMMENT\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/agora/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"agora",
+						""
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8000/api/v1/agora/ \\\n  -H \"Content-Type: application/json\" \\\n  -H \"Authorization: ApiKey usuario1:su_api_key_aqui\" \\\n  -d '{\n    \"pretty_name\": \"Mi Nueva Ágora\",\n    \"short_description\": \"Descripción corta de la ágora\",\n    \"membership_policy\": \"ANYONE_CAN_JOIN\",\n    \"comments_policy\": \"ANYONE_CAN_COMMENT\"\n  }'"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener ágora específica",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/agora/{{AgoraId}}/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"agora",
+						"{{AgoraId}}",
+						""
+					]
+				},
+				"description": "Generated from cURL: curl -X GET http://localhost:8000/api/v1/agora/1/ \\\r\n  -H \"Accept: application/json\""
+			},
+			"response": []
+		},
+		{
+			"name": "Unirse a ágora",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "ApiKey {{user}}:{{ApiKey}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"action\": \"join\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/agora/1/action/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"agora",
+						"1",
+						"action",
+						""
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8000/api/v1/agora/1/action/ \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -H \"Authorization: ApiKey usuario1:su_api_key_aqui\" \\\r\n  -d '{\"action\": \"join\"}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Editar Agora",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"AgoraId\", pm.response.json().id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "ApiKey {{user}}:{{ApiKey}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pretty_name\": \"Nombre Actualizado 2 de la Ágora\",\r\n    \"short_description\": \"Nueva descripción 2 corta\",\r\n    \"biography\": \"Biografía detallada de la ágora 2\",\r\n    \"is_vote_secret\": false,\r\n    \"membership_policy\": \"JOINING_REQUIRES_ADMINS_APPROVAL\",\r\n    \"comments_policy\": \"ONLY_MEMBERS_CAN_COMMENT\",\r\n    \"delegation_policy\": \"ALLOW_DELEGATION\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/agora/{{AgoraId}}/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"agora",
+						"{{AgoraId}}",
+						""
+					]
+				},
+				"description": "Generated from cURL: curl -X PUT http://localhost:8000/api/v1/agora/1/ \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -H \"Authorization: ApiKey usuario1:su_api_key_aqui\" \\\r\n  -d '{\r\n    \"pretty_name\": \"Nombre Actualizado de la Ágora\",\r\n    \"short_description\": \"Nueva descripción corta\",\r\n    \"biography\": \"Biografía detallada de la ágora\",\r\n    \"is_vote_secret\": false,\r\n    \"membership_policy\": \"JOINING_REQUIRES_ADMINS_APPROVAL\",\r\n    \"comments_policy\": \"ONLY_MEMBERS_CAN_COMMENT\",\r\n    \"delegation_policy\": \"ALLOW_DELEGATION\"\r\n  }'"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"variable": [
@@ -294,6 +425,10 @@
 			"key": "user",
 			"value": "2donuevousuario",
 			"type": "default"
+		},
+		{
+			"key": "AgoraId",
+			"value": "1"
 		}
 	]
 }

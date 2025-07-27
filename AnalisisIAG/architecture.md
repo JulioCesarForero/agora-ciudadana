@@ -316,9 +316,6 @@ curl -X GET http://localhost:8000/api/v1/agora/ \
   -H "Accept: application/json"
 
 # Crear nueva ágora
-
-## Esta Presentando novedad 
-
 curl -X POST http://localhost:8000/api/v1/agora/ \
   -H "Content-Type: application/json" \
   -H "Authorization: ApiKey usuario1:su_api_key_aqui" \
@@ -326,7 +323,22 @@ curl -X POST http://localhost:8000/api/v1/agora/ \
     "pretty_name": "Mi Nueva Ágora",
     "short_description": "Descripción corta de la ágora",
     "membership_policy": "ANYONE_CAN_JOIN",
-    "comments_policy": "ANYONE_CAN_COMMENT"
+    "comments_policy": "ANYONE_CAN_COMMENT",
+    "is_vote_secret": false
+  }'
+
+# Editar ágora existente (requiere permisos de administrador)
+curl -X PUT http://localhost:8000/api/v1/agora/1/ \
+  -H "Content-Type: application/json" \
+  -H "Authorization: ApiKey usuario1:su_api_key_aqui" \
+  -d '{
+    "pretty_name": "Nombre Actualizado de la Ágora",
+    "short_description": "Nueva descripción corta",
+    "biography": "Biografía detallada de la ágora",
+    "is_vote_secret": false,
+    "membership_policy": "JOINING_REQUIRES_ADMINS_APPROVAL",
+    "comments_policy": "ONLY_MEMBERS_CAN_COMMENT",
+    "delegation_policy": "ALLOW_DELEGATION"
   }'
 
 # Obtener ágora específica
