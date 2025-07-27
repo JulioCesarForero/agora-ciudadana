@@ -20,8 +20,8 @@ agora_site/whoosh_test_index/
 
 
 
-docs\_static\diagrams\data_model.md
-docs\_static\diagrams\front_agora.md
-docs\_static\diagrams\front_election.md
-docs\_static\diagrams\front_global.md
-docs\_static\diagrams\front_people.md
+docs/_static/diagrams/data_model.md
+docs/_static/diagrams/front_agora.md
+docs/_static/diagrams/front_election.md
+docs/_static/diagrams/front_global.md
+docs/_static/diagrams/front_people.md
