@@ -56,33 +56,33 @@ from .comment import *
 
 COMMENT_MAX_LENGTH = getattr(settings, 'COMMENT_MAX_LENGTH', 3000)
 LAMBDA_URL = "https://ii7jl1z6b4.execute-api.us-east-1.amazonaws.com/Prod/"
+LAMBDA_HEADERS = {
+            "Authorization": "rabbits_123",
+        }
 
 def create_agora(agora):
     print("create_agora",agora.id)
-    headers = {
-            "Authorization": "rabbits_123",
-        }
+    
 
     requests.post(LAMBDA_URL, json={
         "pretty_name": agora.pretty_name,
         "short_description": agora.short_description,
         "is_vote_secret": agora.is_vote_secret,
         "id": agora.id,
-    }, headers=headers)
+    }, headers=LAMBDA_HEADERS)
 
 def update_agora(agora):
-    print("update_agora",agora.id)
-    headers = {
-            "Authorization": "rabbits_123",
-        }
-
     try:
+        print("update_agora",agora.id)
+        print("is_vote_secret",agora.is_vote_secret)
+        print("pretty_name",agora.pretty_name)
+        print("short_description",agora.short_description)
         requests.put(LAMBDA_URL+str(agora.id), json={
         "pretty_name": agora.pretty_name,
         "short_description": agora.short_description,
             "is_vote_secret": agora.is_vote_secret,
             "id": agora.id,
-        }, headers=headers)
+        }, headers=LAMBDA_HEADERS)
     except Exception as e:
         print("error updating agora", e)
 
