@@ -4,12 +4,12 @@ import boto3
 from typing import List, Optional
 from mangum import Mangum
 from botocore.exceptions import ClientError
+import functools
+import json
 
 app = FastAPI()
 
-dynamodb = boto3.resource("dynamodb")
 TABLE_NAME = "agoras"
-table = dynamodb.Table(TABLE_NAME)
 
 def get_secret():
     secret_name = "agora/auth_token"
@@ -31,12 +31,19 @@ def get_secret():
     except ClientError as e:
         raise e
     
-AUTH_TOKEN = get_secret()
+@functools.lru_cache()
+def cached_secret():
+    return get_secret()
 
-
+@functools.lru_cache()
+def get_table():
+    dynamodb = boto3.resource("dynamodb")    
+    return dynamodb.Table(TABLE_NAME)
 
 def validate_token(authorization: Optional[str] = Header(None)):
-    if not authorization or authorization != AUTH_TOKEN:
+    secret = cached_secret()
+    auth_token = json.loads(secret)["AUTH_TOKEN"]
+    if not authorization or authorization != auth_token:
         raise HTTPException(status_code=401, detail="Invalid or missing token")
 
 class AgoraIn(BaseModel):
@@ -56,6 +63,7 @@ def health():
 @app.get("/agora", response_model=List[AgoraOut], dependencies=[Depends(validate_token)])
 def list_agoras():
     try:
+        table = get_table()
         response = table.scan()
         return response.get("Items", [])
     except Exception as e:
@@ -63,6 +71,7 @@ def list_agoras():
 
 @app.post("/agora", response_model=AgoraOut, dependencies=[Depends(validate_token)])
 def save_agora(agora: AgoraIn):
+    table = get_table()
     item = {
         "id": agora.id,
         "pretty_name": agora.pretty_name,
@@ -77,6 +86,7 @@ def save_agora(agora: AgoraIn):
 
 @app.put("/agora/{id}", response_model=AgoraOut, dependencies=[Depends(validate_token)])
 def update_agora(id: int, agora: AgoraIn):
+    table = get_table()
     item = {
         "id": id,
         "pretty_name": agora.pretty_name,
