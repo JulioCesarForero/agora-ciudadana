@@ -14,5 +14,4 @@ agora_site/media/data/
 agora_site/media/mugshots/
 node_modules
 agora_site/whoosh_test_index/
-build.toml
 .aws-sam/
