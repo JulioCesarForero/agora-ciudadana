@@ -55,7 +55,7 @@ from agora_site.misc.utils import *
 from .comment import *
 
 COMMENT_MAX_LENGTH = getattr(settings, 'COMMENT_MAX_LENGTH', 3000)
-LAMBDA_URL = "https://b8qipkqa24.execute-api.us-east-1.amazonaws.com/Prod/agora/"
+LAMBDA_URL = "https://ii7jl1z6b4.execute-api.us-east-1.amazonaws.com/Prod/"
 
 def create_agora(agora):
     print("create_agora",agora.id)

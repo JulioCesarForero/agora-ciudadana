@@ -42,7 +42,7 @@ def get_table():
 
 def validate_token(authorization: Optional[str] = Header(None)):
     secret = cached_secret()
-    auth_token = json.loads(secret)["AUTH_TOKEN"]
+    auth_token = json.loads(secret)["agora/auth_token"]
     if not authorization or authorization != auth_token:
         raise HTTPException(status_code=401, detail="Invalid or missing token")
 
