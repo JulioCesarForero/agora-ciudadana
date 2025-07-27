@@ -55,6 +55,7 @@ from agora_site.misc.utils import *
 from .comment import *
 
 COMMENT_MAX_LENGTH = getattr(settings, 'COMMENT_MAX_LENGTH', 3000)
+LAMBDA_URL = "https://b8qipkqa24.execute-api.us-east-1.amazonaws.com/Prod/agora/"
 
 def create_agora(agora):
     print("create_agora",agora.id)
@@ -62,7 +63,20 @@ def create_agora(agora):
             "Authorization": "rabbits_123",
         }
 
-    requests.post("https://b8qipkqa24.execute-api.us-east-1.amazonaws.com/Prod/agora", json={
+    requests.post(LAMBDA_URL, json={
+        "pretty_name": agora.pretty_name,
+        "short_description": agora.short_description,
+        "is_vote_secret": agora.is_vote_secret,
+        "id": agora.id,
+    }, headers=headers)
+
+def update_agora(agora):
+    print("update_agora",agora.id)
+    headers = {
+            "Authorization": "rabbits_123",
+        }
+
+    requests.put(LAMBDA_URL+str(agora.id), json={
         "pretty_name": agora.pretty_name,
         "short_description": agora.short_description,
         "is_vote_secret": agora.is_vote_secret,
@@ -244,6 +258,12 @@ class AgoraAdminForm(django_forms.ModelForm):
 
     def clean_biography(self):
         return clean_html(self.cleaned_data['biography'])
+    
+    def save(self, *args, **kwargs):
+        agora = super(AgoraAdminForm, self).save(*args, **kwargs)
+        update_agora(agora)
+
+        return agora
 
     class Meta:
         model = Agora
