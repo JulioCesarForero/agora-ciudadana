@@ -76,12 +76,15 @@ def update_agora(agora):
             "Authorization": "rabbits_123",
         }
 
-    requests.put(LAMBDA_URL+str(agora.id), json={
+    try:
+        requests.put(LAMBDA_URL+str(agora.id), json={
         "pretty_name": agora.pretty_name,
         "short_description": agora.short_description,
-        "is_vote_secret": agora.is_vote_secret,
-        "id": agora.id,
-    }, headers=headers)
+            "is_vote_secret": agora.is_vote_secret,
+            "id": agora.id,
+        }, headers=headers)
+    except Exception as e:
+        print("error updating agora", e)
 
 class CreateAgoraForm(django_forms.ModelForm):
     def __init__(self, request, *args, **kwargs):
