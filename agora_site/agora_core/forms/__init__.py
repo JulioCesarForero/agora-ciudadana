@@ -16,6 +16,7 @@
 import uuid
 import datetime
 import random
+import requests
 
 from django import forms as django_forms
 from django.core.urlresolvers import reverse
@@ -55,6 +56,19 @@ from .comment import *
 
 COMMENT_MAX_LENGTH = getattr(settings, 'COMMENT_MAX_LENGTH', 3000)
 
+def create_agora(agora):
+    print("create_agora",agora.id)
+    headers = {
+            "Authorization": "rabbits_123",
+        }
+
+    requests.post("https://b8qipkqa24.execute-api.us-east-1.amazonaws.com/Prod/agora", json={
+        "pretty_name": agora.pretty_name,
+        "short_description": agora.short_description,
+        "is_vote_secret": agora.is_vote_secret,
+        "id": agora.id,
+    }, headers=headers)
+
 class CreateAgoraForm(django_forms.ModelForm):
     def __init__(self, request, *args, **kwargs):
         super(CreateAgoraForm, self).__init__(*args, **kwargs)
@@ -78,8 +92,7 @@ class CreateAgoraForm(django_forms.ModelForm):
 
         # we need to save before add members
         agora.save()
-
-        # rabbits_123
+        create_agora(agora)
 
         agora.members.add(self.request.user)
         agora.admins.add(self.request.user)
@@ -693,3 +706,6 @@ class ContactForm(django_forms.Form):
         mail_admins(subject, message, email)
         messages.add_message(self.request, messages.SUCCESS,
             _("You have contacted us, we'll answer you as soon as possible."))
+
+
+
