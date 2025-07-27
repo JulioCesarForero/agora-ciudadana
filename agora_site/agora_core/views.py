@@ -242,6 +242,7 @@ class CreateAgoraView(RequestCreateView):
     '''
     Creates a new agora
     '''
+    print("****** CreateAgoraView")
     template_name = 'agora_core/create_agora_form.html'
     form_class = CreateAgoraForm
 

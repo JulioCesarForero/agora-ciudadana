@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  API FastAPI (Python) + Lambda + DynamoDB + Auth Token via Secrets Manager
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: python3.11
+
+Resources:
+  FastApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: app/
+      Handler: main.handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: agoras
+        - Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+              Resource:
+                - !Sub arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:agora/auth_token-*
+      Environment:
+        Variables:
+          TABLE_NAME: agoras
+          AUTH_SECRET_NAME: "agora/auth_token"
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"

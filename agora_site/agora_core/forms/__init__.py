@@ -79,6 +79,8 @@ class CreateAgoraForm(django_forms.ModelForm):
         # we need to save before add members
         agora.save()
 
+        # rabbits_123
+
         agora.members.add(self.request.user)
         agora.admins.add(self.request.user)
 
