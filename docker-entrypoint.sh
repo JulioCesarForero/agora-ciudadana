@@ -56,8 +56,22 @@ if [ ! -s /app/data/db.sqlite ]; then
   python manage.py compilemessages || true
 fi
 
-# ------------------- 5. Arrancar Celery -----------------------
+# ------------------- 5. Ejecutar pruebas (opcional) -----------
+if [ "${RUN_TESTS:-false}" = "true" ]; then
+  echo "🧪 Running tests before deployment..."
+  
+  # Ejecutar pruebas específicas de agora
+  echo "Running agora tests..."
+  python manage.py test agora_site.agora_core.tests.agora --settings=agora_site.test_settings --verbosity=2
+  
+  # Si quieres ejecutar todas las pruebas, descomenta la siguiente línea:
+  # python manage.py test agora_site.agora_core --settings=agora_site.test_settings --verbosity=2
+  
+  echo "✅ All tests passed! Proceeding with deployment..."
+fi
+
+# ------------------- 6. Arrancar Celery -----------------------
 celery -A agora_site worker -l info -B -S djcelery.schedulers.DatabaseScheduler &
 
-# ------------------- 6. Ejecutar comando principal ------------
+# ------------------- 7. Ejecutar comando principal ------------
 exec "$@"

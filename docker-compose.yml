@@ -1,6 +1,9 @@
 services:
   web:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.multistage
+      target: production #testing    #production  # Para usar el stage de producción
     ports:
       - "8000:8000"
     volumes:
@@ -13,12 +16,29 @@ services:
       - C_FORCE_ROOT=true
     depends_on:
       - rabbitmq
+      #- tests  # Asegura que las pruebas pasen antes de iniciar el servidor Queda comentado dado que hay pruebas que aun no pasan.
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/"]
       interval: 30s
       timeout: 10s
       retries: 3
+
+  # Servicio dedicado para ejecutar pruebas
+  tests:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DJANGO_SETTINGS_MODULE=agora_site.test_settings
+    command: >
+      sh -c "
+        echo '🧪 Running agora tests...' &&
+        python manage.py test agora_site.agora_core.tests.agora --settings=agora_site.test_settings --verbosity=2 &&
+        echo '✅ All tests passed!'
+      "
+    restart: "no"  # Solo ejecuta una vez
 
   rabbitmq:
     image: rabbitmq:3-management

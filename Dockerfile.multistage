@@ -1,0 +1,73 @@
+# =================== STAGE 1: BASE ===================
+FROM python:2.7-slim AS base
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    DJANGO_SETTINGS_MODULE=agora_site.settings \
+    PYTHONIOENCODING=utf-8 \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
+
+# Configuración de repos históricos + dependencias del sistema
+RUN set -eux; \
+    sed -i 's|deb.debian.org/debian|archive.debian.org/debian|g' /etc/apt/sources.list && \
+    sed -i 's|security.debian.org|archive.debian.org|g' /etc/apt/sources.list && \
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99ignore-valid-until && \
+    apt-get -o Acquire::Check-Valid-Until=false update && \
+    apt-get -o Acquire::Check-Valid-Until=false install -y --no-install-recommends \
+        git \
+        gettext \
+        build-essential \
+        libxml2-dev \
+        libxslt1-dev \
+        libjpeg-dev \
+        zlib1g-dev \
+        libfreetype6-dev \
+        uuid-dev \
+        curl \
+        wget \
+        sqlite3 \
+        locales \
+        netcat-traditional && \
+    rm -rf /var/lib/apt/lists/* && \
+    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+
+WORKDIR /app
+
+# Instalar dependencias Python
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copiar código fuente
+COPY . /app/
+
+# =================== STAGE 2: TESTING ===================
+FROM base AS testing
+
+ENV DJANGO_SETTINGS_MODULE=agora_site.test_settings
+
+# Ejecutar las pruebas
+RUN echo "🧪 Running tests..." && \
+    python manage.py test agora_core --settings=agora_site.test_settings --verbosity=2 && \
+    echo "✅ All tests passed!"
+
+# =================== STAGE 3: PRODUCTION ===================
+FROM base AS production
+
+# Copiar script de entrada
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Crear directorios necesarios
+RUN mkdir -p /app/agora_site/media/data \
+    && mkdir -p /app/data \
+    && touch /app/data/db.sqlite \
+    && chmod 777 /app/data/db.sqlite
+
+EXPOSE 8000
+
+# Usar el script de inicialización
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"] 
