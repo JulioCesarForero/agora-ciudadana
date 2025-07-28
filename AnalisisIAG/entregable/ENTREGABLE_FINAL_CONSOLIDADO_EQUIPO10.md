@@ -506,7 +506,8 @@ La arquitectura To-Be establece una base sólida para el crecimiento futuro y po
 ## ANEXOS
 
 ### Anexo A: Enlaces y Recursos
-- **Repositorio del Proyecto**: https://github.com/JulioCesarForero/agora-ciudadana
+- **Repositorio del Proyecto**: https://github.com/JulioCesarForero/agora-ciudadana Rama docker-deploy-2
+https://github.com/JulioCesarForero/agora-ciudadana/blob/docker-deploy-2/AnalisisIAG/architecture.md
 - **Documentación AWS**: Configuraciones y templates utilizados
 - **Reportes de Pruebas**: Archivos HTML/PDF de Artillery.io
 - **Evidencia Visual**: Capturas de pantalla y diagramas
@@ -518,12 +519,20 @@ La arquitectura To-Be establece una base sólida para el crecimiento futuro y po
 - **API Gateway**: Punto de entrada unificado para APIs
 - **DynamoDB**: Base de datos NoSQL administrada por AWS
 
-### Anexo C: Contacto del Equipo
-- **Julio César Forero**: Arquitecto de Software y DevOps
-- **Juan Fernando Copete**: Analista de Calidad y Métricas
-- **Jorge Iván Puyo**: Desarrollador de Microservicios
-- **Cristhian Camilo Delgado**: Especialista en Pruebas y Validación
-
+- **Video** : URL Video https://uniandes-my.sharepoint.com/:f:/g/personal/ji_puyo_uniandes_edu_co/EoIIOGupK4xPu3JjNw9xq0ABc52pAOamVnr1blGeSNdcGA?e=QPQo9e
 ---
 
-**Documento generado el 27/07/2025 - Versión 1.0 Final**
+# Uso de Inteligencia Artificial Generativa (IAG) 
+
+
+Se hizo uso de IAG en varias partes del entregable.  
+
+Se utilizaron principalmente Claude 4-Sonnet y GitHub Copilot.  
+
+Claude fue empleado para estructurar las respuestas de arquitectura y mantenibilidad, validar conceptos del sistema legado, y proponer una estrategia de modernización ajustada al alcance del equipo.  
+
+Copilot se utilizó para generacion y validacion de codigo. 
+
+Los resultados obtenidos fueron de alta calidad, pero requerían validación manual y ajustes por parte del equipo. Las salidas generadas por la IAG fueron integradas con criterio técnico, evitando errores comunes como alucinaciones o suposiciones incorrectas. En todos los casos, la IAG se usó como complemento para acelerar y enriquecer el análisis técnico, no como reemplazo del criterio del equipo. 
+
+
