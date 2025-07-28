@@ -351,10 +351,10 @@ async def create_agora(payload: CreateAgoraDTO):
 ### 7.2 Evidencia de Pruebas
 
 #### 7.2.1 Configuración de Pruebas de Carga
-![Configuración de Pruebas](Imagenes/Configuracion%20de%20prueba%20de%20carga%20Legacy%20Vs%20Modernizado.png)
+![Configuración de Pruebas](Imagenes\ConfiguracionPruebaCargaLegacyVsModernizado.png)
 
-#### 7.2.2 Ejecución y Resultados
-![Ejecución de Pruebas](Imagenes/Ejecucion%20de%20prueba%20de%20carga%20Legacy%20Vs%20Modernizado.png)
+#### 7.2.2 Ejecución servicio Crear Agora
+![Ejecución de Pruebas](Imagenes\CrearAgoraLegacy.png)
 
 #### 7.2.3 Comparación de Estabilidad
 ![Comparación Legacy vs Modernizado](Imagenes/EjecucionPruebaCargaLegacyVsModernizado.png)
